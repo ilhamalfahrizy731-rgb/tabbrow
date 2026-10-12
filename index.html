@@ -188,7 +188,7 @@
 
     <!-- Background Preview GIF -->
     <div id="bgMediaContainer">
-        <video src="bnw.mp4" autoplay loop muted playsinline style="filter: blur(0px);"></video>
+        <video src="background1.mp4" autoplay loop muted playsinline style="filter: blur(0px);"></video>
     </div>
     <div id="bgOverlay"></div>
 
@@ -705,7 +705,7 @@
             document.getElementById('quoteText').innerText = `"${q.text}" — ${q.author}`;
         }
 
-        // --- 8. Background Settings (bnw.mp4 default) ---
+        // --- 8. Background Settings (background1.mp4 default) ---
         function openSettingsModal() { document.getElementById('settingsModal').classList.remove('hidden'); }
         function closeSettingsModal() { document.getElementById('settingsModal').classList.add('hidden'); }
 
@@ -758,7 +758,7 @@
 
         function resetBackground() {
             document.getElementById('bgMediaContainer').innerHTML = 
-                `<video src="bnw.mp4" autoplay loop muted playsinline style="filter: blur(0px);"></video>`;
+                `<video src="background1.mp4" autoplay loop muted playsinline style="filter: blur(0px);"></video>`;
             localStorage.removeItem('jp_bg_data');
             localStorage.removeItem('jp_bg_is_video');
             localStorage.removeItem('jp_bg_blur');
@@ -773,7 +773,7 @@
             const savedNotes = localStorage.getItem('jp_quick_notes');
             if (savedNotes !== null) document.getElementById('quickNotesInput').value = savedNotes;
 
-            // Load background: jika ada di localStorage, pakai itu. Jika tidak, bnw.mp4 (sudah default di HTML).
+            // Load background: jika ada di localStorage, pakai itu. Jika tidak, background1.mp4 (sudah default di HTML).
             const bgData = localStorage.getItem('jp_bg_data');
             const isVideo = localStorage.getItem('jp_bg_is_video') === 'true';
             if (bgData) {

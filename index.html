@@ -1,0 +1,797 @@
+<!DOCTYPE html>
+<html lang="id" class="h-full">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tab Baru - Japanese Dark Aesthetic</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Noto+Serif+JP:wght@400;600;700;900&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Plus Jakarta Sans', 'sans-serif'],
+                        serif: ['Noto Serif JP', 'serif'],
+                        mono: ['JetBrains Mono', 'monospace'],
+                    },
+                    colors: {
+                        jpBg: '#0e1416',
+                        jpCard: 'rgba(18, 26, 28, 0.75)',
+                        jpBorder: 'rgba(255, 255, 255, 0.08)',
+                        jpGold: '#d4af37',
+                        jpGoldMuted: '#b89230',
+                        jpTeal: '#2b4c52',
+                        jpSlate: '#192529',
+                        jpCharcoal: '#0b1012',
+                        jpRed: '#c84b31',
+                        jpTextMuted: '#8a9e9b'
+                    },
+                    boxShadow: {
+                        'jp-card': '0 20px 40px -15px rgba(0, 0, 0, 0.6), inset 0 1px 1px rgba(255, 255, 255, 0.05)',
+                        'jp-gold': '0 0 20px rgba(212, 175, 55, 0.2)',
+                        'island': '0 10px 30px -10px rgba(0, 0, 0, 0.8), 0 0 0 1px rgba(255, 255, 255, 0.05)'
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: #0e1416;
+            color: #e5eceb;
+            overflow-x: hidden;
+            background-image: 
+                radial-gradient(circle at 50% 20%, rgba(43, 76, 82, 0.25) 0%, transparent 60%),
+                radial-gradient(circle at 80% 80%, rgba(212, 175, 55, 0.08) 0%, transparent 50%);
+            background-attachment: fixed;
+        }
+
+        .jp-panel {
+            background: rgba(18, 26, 28, 0.72);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            box-shadow: 0 15px 35px -10px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.06);
+            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .jp-panel:hover {
+            border-color: rgba(212, 175, 55, 0.25);
+            box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.6), inset 0 1px 0 rgba(212, 175, 55, 0.2);
+        }
+
+        .dynamic-island {
+            background: rgba(11, 16, 18, 0.85);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.8), 0 0 0 1px rgba(255, 255, 255, 0.05);
+            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+            overflow: hidden;
+        }
+        
+        .dynamic-island.expanded {
+            width: 320px;
+            height: auto;
+            border-radius: 24px;
+        }
+
+        .dynamic-island.collapsed {
+            width: 180px;
+            height: 44px;
+            border-radius: 22px;
+        }
+
+        .kanji-vertical {
+            writing-mode: vertical-rl;
+            text-orientation: upright;
+            font-family: 'Noto Serif JP', serif;
+            letter-spacing: 0.3em;
+            user-select: none;
+            pointer-events: none;
+        }
+
+        .jp-input {
+            background: rgba(11, 16, 18, 0.6);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: #ffffff;
+            transition: all 0.25s ease;
+        }
+
+        .jp-input:focus {
+            border-color: rgba(212, 175, 55, 0.6);
+            box-shadow: 0 0 15px rgba(212, 175, 55, 0.15);
+            outline: none;
+        }
+
+        .jp-btn {
+            transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .jp-btn:hover {
+            transform: translateY(-2px);
+        }
+
+        .jp-btn:active {
+            transform: translateY(1px);
+        }
+
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #0e1416;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #2b4c52;
+            border-radius: 3px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #d4af37;
+        }
+
+        #bgMediaContainer {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: 0;
+            pointer-events: none;
+            overflow: hidden;
+        }
+
+        #bgMediaContainer img, #bgMediaContainer video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: filter 0.3s ease;
+        }
+
+        #bgOverlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: 1;
+            pointer-events: none;
+            background-color: #080d0e;
+            opacity: 0.6;
+            transition: opacity 0.3s ease;
+        }
+
+        .visualizer-bar {
+            width: 3px;
+            background: #d4af37;
+            border-radius: 2px;
+            transition: height 0.2s ease;
+        }
+
+        .brand-icon {
+            width: 1.25rem;
+            height: 1.25rem;
+            stroke-width: 2;
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col justify-between p-4 sm:p-6 md:p-8 relative selection:bg-jpGold selection:text-black">
+
+    <!-- Background Preview GIF -->
+    <div id="bgMediaContainer">
+        <img src="preview.gif" alt="Background Preview" style="filter: blur(0px);" />
+    </div>
+    <div id="bgOverlay"></div>
+
+    <!-- Japanese Aesthetic Decorative Kanji Watermark -->
+    <div class="fixed right-6 top-12 z-0 opacity-10 text-jpGold text-6xl md:text-8xl kanji-vertical font-black hidden lg:block">
+        静寂と調和
+    </div>
+    <div class="fixed left-6 bottom-12 z-0 opacity-10 text-jpGold text-6xl md:text-8xl kanji-vertical font-black hidden lg:block">
+        日常の美学
+    </div>
+
+    <!-- Dynamic Island Music Player -->
+    <div class="fixed top-4 left-1/2 -translate-x-1/2 z-50 flex justify-center">
+        <div id="dynamicIsland" class="dynamic-island collapsed flex flex-col justify-center items-center p-2 cursor-pointer" onclick="toggleIslandExpand()">
+            
+            <div id="islandCollapsed" class="flex items-center justify-between w-full px-2 h-full">
+                <div class="flex items-center gap-2">
+                    <div class="w-6 h-6 rounded-full bg-jpTeal/40 flex items-center justify-center">
+                        <i data-lucide="music" class="w-3 h-3 text-jpGold"></i>
+                    </div>
+                    <span class="text-[10px] font-mono text-jpGold tracking-wider">LO-FI</span>
+                </div>
+                <div class="flex items-center gap-1">
+                    <div class="visualizer-bar h-2"></div>
+                    <div class="visualizer-bar h-3"></div>
+                    <div class="visualizer-bar h-1.5"></div>
+                </div>
+            </div>
+
+            <div id="islandExpanded" class="hidden w-full flex-col gap-3 p-3">
+                <div class="flex items-center justify-between w-full">
+                    <div class="flex items-center gap-3">
+                        <div class="w-10 h-10 rounded-xl bg-jpTeal/40 border border-jpGold/30 flex items-center justify-center text-jpGold">
+                            <i data-lucide="music" class="w-5 h-5 stroke-[2]"></i>
+                        </div>
+                        <div>
+                            <h3 class="text-[10px] font-mono tracking-wider text-jpGold uppercase">LO-FI AUDIO // 音楽</h3>
+                            <p id="trackTitle" class="text-xs font-medium text-gray-200 truncate max-w-[140px]">Lelah - Local Track</p>
+                        </div>
+                    </div>
+                    <span id="audioStatusBadge" class="px-2 py-0.5 text-[9px] font-mono tracking-wider rounded-full bg-jpCharcoal text-jpTextMuted border border-jpBorder">PAUSED</span>
+                </div>
+
+                <div class="flex items-end justify-between gap-1 h-6 bg-jpCharcoal/80 p-1.5 rounded-lg border border-jpBorder" id="audioVisualizerExpanded">
+                    <div class="w-1 bg-jpGold/40 h-1.5 rounded-full transition-all duration-300"></div>
+                    <div class="w-1 bg-jpTeal h-4 rounded-full transition-all duration-300"></div>
+                    <div class="w-1 bg-jpGold h-2.5 rounded-full transition-all duration-300"></div>
+                    <div class="w-1 bg-jpTeal/70 h-5 rounded-full transition-all duration-300"></div>
+                    <div class="w-1 bg-jpGold/80 h-3 rounded-full transition-all duration-300"></div>
+                    <div class="w-1 bg-jpTeal h-6 rounded-full transition-all duration-300"></div>
+                    <div class="w-1 bg-jpGold h-2 rounded-full transition-all duration-300"></div>
+                    <div class="w-1 bg-jpTeal/50 h-4 rounded-full transition-all duration-300"></div>
+                </div>
+
+                <div class="w-full bg-jpCharcoal h-1.5 rounded-full overflow-hidden relative cursor-pointer border border-jpBorder" onclick="seekAudio(event)" id="progressContainer">
+                    <div id="progressBar" class="bg-jpGold h-full w-0 rounded-full transition-all duration-200"></div>
+                </div>
+
+                <div class="flex items-center justify-between w-full">
+                    <button onclick="event.stopPropagation(); togglePlayMusic()" id="playPauseBtn" class="bg-jpGold hover:bg-jpGoldMuted text-jpBg w-9 h-9 rounded-lg jp-btn flex items-center justify-center shadow-jp-gold">
+                        <i id="playPauseIcon" data-lucide="play" class="w-4 h-4 stroke-[2.5] fill-jpBg"></i>
+                    </button>
+
+                    <div class="flex items-center space-x-2 bg-jpCharcoal/80 px-2 py-1.5 rounded-lg border border-jpBorder" onclick="event.stopPropagation()">
+                        <i data-lucide="volume-2" class="w-3 h-3 text-jpGold stroke-[2]"></i>
+                        <input type="range" id="volumeSlider" min="0" max="1" step="0.05" value="0.7" oninput="setVolume(this.value)" 
+                            class="w-16 accent-jpGold h-1 bg-jpSlate rounded-lg cursor-pointer">
+                    </div>
+                </div>
+            </div>
+
+            <!-- HTML5 Audio Element (Menggunakan file lokal lelah.mp3) -->
+            <audio id="lofiAudio" preload="auto">
+                <source src="lelah.mp3" type="audio/mpeg">
+            </audio>
+        </div>
+    </div>
+
+    <!-- Main Container -->
+    <div class="relative z-10 max-w-7xl mx-auto w-full flex flex-col min-h-[90vh] justify-between gap-8 pt-8">
+        <header class="w-full flex justify-between items-center gap-4">
+            <div class="flex items-center space-x-3">
+                <div class="w-10 h-10 rounded-full bg-jpTeal/40 border border-jpGold/40 flex items-center justify-center text-jpGold shadow-jp-gold">
+                    <i data-lucide="compass" class="w-5 h-5 stroke-[1.75]"></i>
+                </div>
+                <div>
+                    <div class="flex items-center gap-2">
+                        <span class="font-serif font-bold text-sm tracking-widest text-jpGold uppercase">侘寂</span>
+                        <span class="text-xs text-jpTextMuted font-mono">// TAB BARU</span>
+                    </div>
+                    <p class="text-[10px] text-gray-400 font-mono tracking-wider">BRAVE CUSTOM DASHBOARD</p>
+                </div>
+            </div>
+
+            <div class="flex items-center space-x-3">
+                <div class="hidden sm:flex items-center space-x-2 bg-jpCard/80 border border-jpBorder text-gray-300 px-4 py-2 rounded-full text-xs font-mono">
+                    <i data-lucide="map-pin" class="w-4 h-4 text-jpGold stroke-[2]"></i>
+                    <span id="weatherText">CIREBON, INDONESIA</span>
+                </div>
+
+                <button onclick="openSettingsModal()" class="jp-btn bg-jpCard hover:bg-jpTeal/30 border border-jpBorder p-2.5 rounded-full text-gray-300 hover:text-jpGold shadow-lg" title="Pengaturan Latar Belakang">
+                    <i data-lucide="sliders" class="w-5 h-5 stroke-[2]"></i>
+                </button>
+            </div>
+        </header>
+
+        <main class="w-full my-auto py-2 grid grid-cols-1 lg:grid-cols-12 gap-8">
+            
+            <div class="lg:col-span-8 flex flex-col items-center justify-center space-y-8">
+                
+                <div class="text-center w-full space-y-3">
+                    <div class="inline-block px-4 py-2">
+                        <h1 id="clock" class="font-mono text-5xl sm:text-7xl md:text-8xl tracking-tight text-white font-light drop-shadow-lg">00:00:00</h1>
+                    </div>
+                    <div class="flex flex-col sm:flex-row items-center justify-center gap-2 pt-1">
+                        <span id="greeting" class="text-base sm:text-lg font-medium text-jpGold tracking-wide drop-shadow-md">
+                            SELAMAT PAGI, CAPTAIN
+                        </span>
+                        <span class="hidden sm:inline text-gray-600">•</span>
+                        <div id="date" class="font-serif text-xs sm:text-sm text-gray-300 tracking-widest uppercase drop-shadow-md">
+                            SENIN, 12 OKTOBER 2026
+                        </div>
+                    </div>
+                </div>
+
+                <div class="w-full max-w-2xl">
+                    <form id="searchForm" action="https://www.google.com/search" method="GET" class="flex flex-col sm:flex-row gap-2 relative">
+                        <div class="relative flex-grow flex items-center">
+                            <div class="absolute left-4 text-jpGold/70 pointer-events-none">
+                                <i id="searchIcon" data-lucide="search" class="w-5 h-5 stroke-[2]"></i>
+                            </div>
+                            <input type="text" id="searchInput" name="q" placeholder="Cari di web atau ketik URL..." autocomplete="off"
+                                class="w-full pl-12 pr-4 py-3.5 rounded-2xl jp-input text-sm sm:text-base font-sans placeholder-gray-500">
+                        </div>
+
+                        <div class="relative" id="customEngineDropdown">
+                            <button type="button" onclick="toggleEngineDropdown()" id="selectedEngineBtn" 
+                                class="w-full sm:w-auto px-5 py-3.5 bg-jpCard border border-jpBorder hover:border-jpGold/40 text-gray-200 font-medium text-xs sm:text-sm rounded-2xl jp-btn flex items-center justify-between gap-3 min-w-[140px]">
+                                <span class="flex items-center gap-2">
+                                    <i id="engineIcon" data-lucide="search" class="w-4 h-4 text-jpGold stroke-[2]"></i>
+                                    <span id="engineLabel" class="tracking-wider">GOOGLE</span>
+                                </span>
+                                <i data-lucide="chevron-down" class="w-4 h-4 text-gray-400 stroke-[2]"></i>
+                            </button>
+
+                            <div id="engineMenu" class="hidden absolute right-0 top-full mt-2 w-full sm:w-48 bg-jpBg/95 border border-jpBorder rounded-xl shadow-2xl z-50 overflow-hidden divide-y divide-jpBorder backdrop-blur-md">
+                                <button type="button" onclick="selectSearchEngine('google')" class="w-full px-4 py-3 text-xs text-left hover:bg-jpTeal/30 text-gray-200 hover:text-jpGold flex items-center gap-2.5 transition">
+                                    <i data-lucide="search" class="w-4 h-4 stroke-[2]"></i> GOOGLE
+                                </button>
+                                <button type="button" onclick="selectSearchEngine('duckduckgo')" class="w-full px-4 py-3 text-xs text-left hover:bg-jpTeal/30 text-gray-200 hover:text-jpGold flex items-center gap-2.5 transition">
+                                    <i data-lucide="shield" class="w-4 h-4 stroke-[2]"></i> DUCKDUCKGO
+                                </button>
+                                <button type="button" onclick="selectSearchEngine('github')" class="w-full px-4 py-3 text-xs text-left hover:bg-jpTeal/30 text-gray-200 hover:text-jpGold flex items-center gap-2.5 transition">
+                                    <i data-lucide="github" class="w-4 h-4 stroke-[2]"></i> GITHUB
+                                </button>
+                                <button type="button" onclick="selectSearchEngine('youtube')" class="w-full px-4 py-3 text-xs text-left hover:bg-jpTeal/30 text-gray-200 hover:text-jpGold flex items-center gap-2.5 transition">
+                                    <i data-lucide="youtube" class="w-4 h-4 stroke-[2]"></i> YOUTUBE
+                                </button>
+                            </div>
+                        </div>
+
+                        <button type="submit" class="bg-jpGold hover:bg-jpGoldMuted text-jpBg px-6 py-3.5 rounded-2xl jp-btn font-semibold flex items-center justify-center shadow-jp-gold">
+                            <i data-lucide="arrow-right" class="w-5 h-5 stroke-[2.5]"></i>
+                        </button>
+                    </form>
+                </div>
+
+                <div class="w-full space-y-3">
+                    <div class="flex justify-between items-center px-1">
+                        <span class="text-xs font-mono tracking-widest text-jpGold uppercase flex items-center gap-2">
+                            <i data-lucide="bookmark" class="w-3.5 h-3.5 stroke-[2]"></i> PINTASAN // ショートカット
+                        </span>
+                        <button onclick="openAddShortcutModal()" class="text-xs text-gray-400 hover:text-jpGold font-mono flex items-center gap-1 transition">
+                            <i data-lucide="plus" class="w-3.5 h-3.5 stroke-[2]"></i> TAMBAH
+                        </button>
+                    </div>
+
+                    <div id="shortcutsGrid" class="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-8 gap-3">
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="lg:col-span-4 flex flex-col space-y-6">
+                <div class="jp-panel p-5 rounded-2xl flex flex-col flex-grow">
+                    <div class="flex items-center justify-between mb-3">
+                        <div class="flex items-center space-x-2">
+                            <i data-lucide="file-text" class="w-4 h-4 text-jpGold stroke-[2]"></i>
+                            <h3 class="font-mono text-xs tracking-wider text-gray-300 uppercase">CATATAN // メモ</h3>
+                        </div>
+                        <span id="noteSaveStatus" class="font-mono text-[10px] text-jpTextMuted">SAVED</span>
+                    </div>
+                    <textarea id="quickNotesInput" oninput="saveNotes()" placeholder="Tulis rencana, tugas, atau ide kamu..."
+                        class="w-full h-36 bg-jpCharcoal/60 text-gray-200 p-3.5 rounded-xl border border-jpBorder text-xs font-mono resize-none outline-none leading-relaxed focus:border-jpGold/40 transition"></textarea>
+                </div>
+            </div>
+
+        </main>
+
+        <footer class="w-full max-w-4xl mx-auto text-center pb-2">
+            <div class="jp-panel p-3.5 rounded-2xl flex items-center justify-between text-xs text-gray-300">
+                <div class="flex items-center space-x-3 truncate text-left">
+                    <div class="w-7 h-7 rounded-lg bg-jpTeal/30 border border-jpGold/30 flex items-center justify-center text-jpGold flex-shrink-0">
+                        <i data-lucide="quote" class="w-3.5 h-3.5 stroke-[2]"></i>
+                    </div>
+                    <p id="quoteText" class="truncate font-sans italic text-gray-300">"Kesederhanaan adalah bentuk kecerdasan tertinggi." — Japanese Proverb</p>
+                </div>
+                <button onclick="loadNewQuote()" class="ml-3 p-2 bg-jpCharcoal hover:bg-jpTeal/30 border border-jpBorder hover:border-jpGold/40 rounded-xl text-gray-300 hover:text-jpGold jp-btn flex-shrink-0" title="Kutipan Baru">
+                    <i data-lucide="refresh-cw" class="w-4 h-4 stroke-[2]"></i>
+                </button>
+            </div>
+        </footer>
+
+    </div>
+
+    <div id="settingsModal" class="fixed inset-0 bg-black/80 backdrop-blur-md z-50 flex items-center justify-center hidden p-4">
+        <div class="jp-panel text-gray-200 w-full max-w-md p-6 rounded-3xl space-y-5 border border-jpGold/30">
+            <div class="flex justify-between items-center border-b border-jpBorder pb-3">
+                <h3 class="text-base font-mono tracking-wider uppercase text-jpGold flex items-center gap-2">
+                    <i data-lucide="sliders" class="w-5 h-5 stroke-[2]"></i> PENGATURAN BG // 背景
+                </h3>
+                <button onclick="closeSettingsModal()" class="text-gray-400 hover:text-white p-1 rounded-lg">
+                    <i data-lucide="x" class="w-5 h-5 stroke-[2]"></i>
+                </button>
+            </div>
+
+            <div class="space-y-4 font-mono text-xs">
+                <div>
+                    <label class="block mb-1.5 text-gray-400 uppercase">1. UNGGAH FOTO/VIDEO LOKAL</label>
+                    <input type="file" id="bgFileInput" accept="image/*,video/*" onchange="handleFileUpload(event)"
+                        class="w-full p-2 bg-jpCharcoal text-gray-300 border border-jpBorder rounded-xl text-xs cursor-pointer">
+                </div>
+
+                <div>
+                    <label class="block mb-1.5 text-gray-400 uppercase">2. ATAU MASUKKAN URL (GAMBAR/MP4)</label>
+                    <div class="flex gap-2">
+                        <input type="url" id="bgUrlInput" placeholder="https://example.com/bg.mp4" class="w-full p-2.5 bg-jpCharcoal text-gray-200 border border-jpBorder rounded-xl outline-none focus:border-jpGold">
+                        <button onclick="applyBgUrl()" class="bg-jpGold hover:bg-jpGoldMuted text-jpBg px-4 py-2.5 rounded-xl font-bold jp-btn">APPLY</button>
+                    </div>
+                </div>
+
+                <div>
+                    <div class="flex justify-between mb-1.5">
+                        <label class="text-gray-400 uppercase">3. EFEK BLUR BACKGROUND</label>
+                        <span id="blurValText" class="text-jpGold">0px</span>
+                    </div>
+                    <input type="range" id="blurSlider" min="0" max="30" value="0" oninput="updateBlur(this.value)" 
+                        class="w-full accent-jpGold h-1.5 bg-jpCharcoal rounded-lg cursor-pointer">
+                </div>
+
+                <div>
+                    <div class="flex justify-between mb-1.5">
+                        <label class="text-gray-400 uppercase">4. KEGELAPAN OVERLAY (OPACITY)</label>
+                        <span id="overlayValText" class="text-jpGold">60%</span>
+                    </div>
+                    <input type="range" id="overlaySlider" min="0" max="1" step="0.05" value="0.6" oninput="updateOverlayOpacity(this.value)" 
+                        class="w-full accent-jpGold h-1.5 bg-jpCharcoal rounded-lg cursor-pointer">
+                </div>
+
+                <div class="pt-2 space-y-2">
+                    <button onclick="resetBackground()" class="w-full bg-jpCharcoal hover:bg-jpRed/20 border border-jpBorder hover:border-jpRed/40 text-jpRed py-3 rounded-xl font-mono uppercase tracking-wider jp-btn">
+                        RESET KE DEFAULT
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="addModal" class="fixed inset-0 bg-black/80 backdrop-blur-md z-50 flex items-center justify-center hidden p-4">
+        <div class="jp-panel text-gray-200 w-full max-w-md p-6 rounded-3xl space-y-4 border border-jpGold/30">
+            <div class="flex justify-between items-center border-b border-jpBorder pb-2">
+                <h3 class="text-sm font-mono tracking-wider uppercase text-jpGold">TAMBAH PINTASAN</h3>
+                <button onclick="closeAddShortcutModal()" class="text-gray-400 hover:text-white">
+                    <i data-lucide="x" class="w-5 h-5 stroke-[2]"></i>
+                </button>
+            </div>
+            
+            <form id="addShortcutForm" onsubmit="handleAddNewShortcut(event)" class="space-y-3 font-mono text-xs">
+                <div>
+                    <label class="block mb-1 text-gray-400">NAMA SITUS</label>
+                    <input type="text" id="shortcutName" required placeholder="Contoh: ChatGPT" class="w-full p-2.5 bg-jpCharcoal text-gray-200 border border-jpBorder rounded-xl outline-none focus:border-jpGold">
+                </div>
+                <div>
+                    <label class="block mb-1 text-gray-400">URL SITUS (https://...)</label>
+                    <input type="url" id="shortcutUrl" required placeholder="https://chatgpt.com" class="w-full p-2.5 bg-jpCharcoal text-gray-200 border border-jpBorder rounded-xl outline-none focus:border-jpGold">
+                </div>
+                <div>
+                    <label class="block mb-1 text-gray-400">NAMA IKON (globe, bot, youtube, github, twitter, tv, dll)</label>
+                    <input type="text" id="shortcutIcon" required placeholder="globe" value="globe" class="w-full p-2.5 bg-jpCharcoal text-gray-200 border border-jpBorder rounded-xl outline-none focus:border-jpGold">
+                </div>
+                
+                <div class="flex justify-end space-x-2 pt-2">
+                    <button type="button" onclick="closeAddShortcutModal()" class="px-4 py-2 bg-jpCharcoal text-gray-300 rounded-xl border border-jpBorder jp-btn">BATAL</button>
+                    <button type="submit" class="px-5 py-2 bg-jpGold hover:bg-jpGoldMuted text-jpBg rounded-xl font-bold jp-btn">SIMPAN</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        lucide.createIcons();
+
+        // --- 1. Clock & Date ---
+        function updateClockAndGreeting() {
+            const now = new Date();
+            const hours = String(now.getHours()).padStart(2, '0');
+            const minutes = String(now.getMinutes()).padStart(2, '0');
+            const seconds = String(now.getSeconds()).padStart(2, '0');
+            document.getElementById('clock').innerText = `${hours}:${minutes}:${seconds}`;
+
+            const days = ['MINGGU', 'SENIN', 'SELASA', 'RABU', 'KAMIS', 'JUMAT', 'SABTU'];
+            const months = ['JANUARI', 'FEBRUARI', 'MARET', 'APRIL', 'MEI', 'JUNI', 'JULI', 'AGUSTUS', 'SEPTEMBER', 'OKTOBER', 'NOVEMBER', 'DESEMBER'];
+            
+            const dayName = days[now.getDay()];
+            const dateNum = now.getDate();
+            const monthName = months[now.getMonth()];
+            const year = now.getFullYear();
+            
+            document.getElementById('date').innerText = `${dayName}, ${dateNum} ${monthName} ${year}`;
+
+            const hr = now.getHours();
+            let greetingText = "SELAMAT MALAM, CAPTAIN";
+            if (hr >= 3 && hr < 11) greetingText = "SELAMAT PAGI, CAPTAIN";
+            else if (hr >= 11 && hr < 15) greetingText = "SELAMAT SIANG, CAPTAIN";
+            else if (hr >= 15 && hr < 18) greetingText = "SELAMAT SORE, CAPTAIN";
+            
+            document.getElementById('greeting').innerText = greetingText;
+        }
+        setInterval(updateClockAndGreeting, 1000);
+        updateClockAndGreeting();
+
+        // --- 2. Dynamic Island ---
+        let isIslandExpanded = false;
+        const island = document.getElementById('dynamicIsland');
+        const islandCollapsed = document.getElementById('islandCollapsed');
+        const islandExpanded = document.getElementById('islandExpanded');
+
+        function toggleIslandExpand() {
+            isIslandExpanded = !isIslandExpanded;
+            if (isIslandExpanded) {
+                island.classList.remove('collapsed');
+                island.classList.add('expanded');
+                islandCollapsed.classList.add('hidden');
+                islandExpanded.classList.remove('hidden');
+                islandExpanded.classList.add('flex');
+            } else {
+                island.classList.remove('expanded');
+                island.classList.add('collapsed');
+                islandExpanded.classList.add('hidden');
+                islandExpanded.classList.remove('flex');
+                islandCollapsed.classList.remove('hidden');
+            }
+        }
+
+        // --- 3. Search Engine ---
+        const searchEngines = {
+            google: { name: 'GOOGLE', url: 'https://www.google.com/search?q=', icon: 'search' },
+            duckduckgo: { name: 'DUCKDUCKGO', url: 'https://duckduckgo.com/?q=', icon: 'shield' },
+            github: { name: 'GITHUB', url: 'https://github.com/search?q=', icon: 'github' },
+            youtube: { name: 'YOUTUBE', url: 'https://www.youtube.com/results?search_query=', icon: 'youtube' }
+        };
+
+        function toggleEngineDropdown() {
+            document.getElementById('engineMenu').classList.toggle('hidden');
+        }
+
+        function selectSearchEngine(key) {
+            if (!searchEngines[key]) return;
+            const engine = searchEngines[key];
+            document.getElementById('searchForm').action = engine.url.split('?')[0];
+            document.getElementById('engineLabel').innerText = engine.name;
+            
+            document.getElementById('engineIcon').setAttribute('data-lucide', engine.icon);
+            document.getElementById('searchIcon').setAttribute('data-lucide', engine.icon);
+            lucide.createIcons();
+            toggleEngineDropdown();
+        }
+
+        window.addEventListener('click', (e) => {
+            const dropdown = document.getElementById('customEngineDropdown');
+            if (!dropdown.contains(e.target)) {
+                document.getElementById('engineMenu').classList.add('hidden');
+            }
+        });
+
+        // --- 4. Shortcuts ---
+        const defaultShortcuts = [
+            { name: 'YouTube', url: 'https://www.youtube.com', icon: 'youtube' },
+            { name: 'GitHub', url: 'https://github.com', icon: 'github' },
+            { name: 'ChatGPT', url: 'https://chatgpt.com', icon: 'bot' },
+            { name: 'WhatsApp', url: 'https://web.whatsapp.com', icon: 'message-square' },
+            { name: 'Gmail', url: 'https://mail.google.com', icon: 'mail' },
+            { name: 'Reddit', url: 'https://reddit.com', icon: 'hash' },
+            { name: 'Twitter', url: 'https://x.com', icon: 'twitter' },
+            { name: 'Netflix', url: 'https://netflix.com', icon: 'tv' }
+        ];
+
+        function getBrandIconSVG(iconName) {
+            const icons = {
+                youtube: `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="brand-icon"><path d="M2.5 17a24.12 24.12 0 0 1 0-10 2 2 0 0 1 1.4-1.4 49.56 49.56 0 0 1 16.2 0A2 2 0 0 1 21.5 7a24.12 24.12 0 0 1 0 10 2 2 0 0 1-1.4 1.4 49.55 49.55 0 0 1-16.2 0A2 2 0 0 1 2.5 17"/><path d="m10 15 5-3-5-3z"/></svg>`,
+                github: `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="brand-icon"><path d="M15 22v-4a4.8 4.8 0 0 0-1-3.5c3 0 6-2 6-5.5.08-1.25-.27-2.48-1-3.5.28-1.15.28-2.35 0-3.5 0 0-1 0-3 1.5-2.64-.5-5.36-.5-8 0C6 2 5 2 5 2c-.3 1.15-.3 2.35 0 3.5A5.403 5.403 0 0 0 4 9c0 3.5 3 5.5 6 5.5-.39.49-.68 1.05-.85 1.65-.17.6-.22 1.23-.15 1.85v4"/><path d="M9 18c-4.51 2-5-2-7-2"/></svg>`,
+                twitter: `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="brand-icon"><path d="M22 4s-.7 2.1-2 3.4c1.6 10-9.4 17.3-18 11.6 2.2.1 4.4-.6 6-2C3 15.5.5 9.6 3 5c2.2 2.6 5.6 4.1 9 4-.9-4.2 4-6.6 7-3.8 1.1 0 3-1.2 3-1.2z"/></svg>`
+            };
+            return icons[iconName] || null;
+        }
+
+        function getShortcuts() {
+            const stored = localStorage.getItem('jp_shortcuts');
+            return stored ? JSON.parse(stored) : defaultShortcuts;
+        }
+
+        function renderShortcuts() {
+            const grid = document.getElementById('shortcutsGrid');
+            const shortcuts = getShortcuts();
+            grid.innerHTML = '';
+            shortcuts.forEach((item) => {
+                const card = document.createElement('a');
+                card.href = item.url;
+                card.target = '_blank';
+                card.className = `jp-panel p-3 rounded-2xl flex flex-col items-center justify-center space-y-2 text-center text-gray-300 hover:text-jpGold transition group`;
+                
+                const brandSVG = getBrandIconSVG(item.icon);
+                let iconHTML = brandSVG ? brandSVG : `<i data-lucide="${item.icon || 'globe'}" class="w-5 h-5 stroke-[2] group-hover:scale-110 transition"></i>`;
+
+                card.innerHTML = `${iconHTML}<span class="font-mono text-[10px] uppercase truncate w-full tracking-wider">${item.name}</span>`;
+                grid.appendChild(card);
+            });
+            lucide.createIcons();
+        }
+
+        function openAddShortcutModal() { document.getElementById('addModal').classList.remove('hidden'); }
+        function closeAddShortcutModal() { document.getElementById('addModal').classList.add('hidden'); document.getElementById('addShortcutForm').reset(); }
+        
+        function handleAddNewShortcut(e) {
+            e.preventDefault();
+            const name = document.getElementById('shortcutName').value;
+            const url = document.getElementById('shortcutUrl').value;
+            const icon = document.getElementById('shortcutIcon').value;
+            const shortcuts = getShortcuts();
+            shortcuts.push({ name, url, icon });
+            localStorage.setItem('jp_shortcuts', JSON.stringify(shortcuts));
+            renderShortcuts();
+            closeAddShortcutModal();
+        }
+        renderShortcuts();
+
+        // --- 5. Audio Player (lelah.mp3) ---
+        const audio = document.getElementById('lofiAudio');
+        let isPlaying = false;
+
+        function togglePlayMusic() {
+            const icon = document.getElementById('playPauseIcon');
+            const badge = document.getElementById('audioStatusBadge');
+
+            if (isPlaying) {
+                audio.pause();
+                icon.setAttribute('data-lucide', 'play');
+                badge.innerText = 'PAUSED';
+                badge.className = 'px-2 py-0.5 text-[9px] font-mono tracking-wider rounded-full bg-jpCharcoal text-jpTextMuted border border-jpBorder';
+                isPlaying = false;
+            } else {
+                const playPromise = audio.play();
+                if (playPromise !== undefined) {
+                    playPromise.then(() => {
+                        icon.setAttribute('data-lucide', 'pause');
+                        badge.innerText = 'PLAYING';
+                        badge.className = 'px-2 py-0.5 text-[9px] font-mono tracking-wider rounded-full bg-jpTeal/40 text-jpGold border border-jpGold/40';
+                        isPlaying = true;
+                    }).catch(error => {
+                        console.error("Audio play failed:", error);
+                        alert('Gagal memutar audio. Pastikan file lelah.mp3 ada di folder yang sama dan Anda menjalankan melalui Local Server (bukan file:///).');
+                    });
+                }
+            }
+            lucide.createIcons();
+        }
+
+        audio.addEventListener('timeupdate', () => {
+            if (audio.duration) {
+                const percent = (audio.currentTime / audio.duration) * 100;
+                document.getElementById('progressBar').style.width = percent + '%';
+            }
+        });
+
+        function seekAudio(e) {
+            e.stopPropagation();
+            const container = document.getElementById('progressContainer');
+            const rect = container.getBoundingClientRect();
+            const clickX = e.clientX - rect.left;
+            if (audio.duration) audio.currentTime = (clickX / rect.width) * audio.duration;
+        }
+
+        function setVolume(val) { audio.volume = val; }
+
+        // --- 6. Notes ---
+        function saveNotes() {
+            const val = document.getElementById('quickNotesInput').value;
+            localStorage.setItem('jp_quick_notes', val);
+            const status = document.getElementById('noteSaveStatus');
+            status.innerText = 'SAVING...';
+            setTimeout(() => { status.innerText = 'SAVED'; }, 400);
+        }
+
+        // --- 7. Quotes ---
+        const quotes = [
+            { text: "Kesederhanaan adalah bentuk kecerdasan tertinggi.", author: "Pepatah Jepang" },
+            { text: "Jatuh tujuh kali, bangkit delapan kali (七転び八起き).", author: "Prinsip Daruma" },
+            { text: "Kode yang bagus seperti puisi yang tenang dan presisi.", author: "Kebijaksanaan Zen" },
+            { text: "Masa depan dibentuk oleh tindakan kecil hari ini.", author: "Filsafat Wabi-Sabi" }
+        ];
+
+        function loadNewQuote() {
+            const q = quotes[Math.floor(Math.random() * quotes.length)];
+            document.getElementById('quoteText').innerText = `"${q.text}" — ${q.author}`;
+        }
+
+        // --- 8. Background Settings (preview.gif default) ---
+        function openSettingsModal() { document.getElementById('settingsModal').classList.remove('hidden'); }
+        function closeSettingsModal() { document.getElementById('settingsModal').classList.add('hidden'); }
+
+        function handleFileUpload(e) {
+            const file = e.target.files[0];
+            if (!file) return;
+            const reader = new FileReader();
+            reader.onload = function(event) {
+                const dataUrl = event.target.result;
+                const isVideo = file.type.startsWith('video');
+                applyBgMedia(dataUrl, isVideo);
+                localStorage.setItem('jp_bg_data', dataUrl);
+                localStorage.setItem('jp_bg_is_video', isVideo ? 'true' : 'false');
+            };
+            reader.readAsDataURL(file);
+        }
+
+        function applyBgUrl() {
+            const url = document.getElementById('bgUrlInput').value.trim();
+            if (!url) return;
+            const isVideo = url.endsWith('.mp4') || url.endsWith('.webm');
+            applyBgMedia(url, isVideo);
+            localStorage.setItem('jp_bg_data', url);
+            localStorage.setItem('jp_bg_is_video', isVideo ? 'true' : 'false');
+            closeSettingsModal();
+        }
+
+        function applyBgMedia(src, isVideo) {
+            const container = document.getElementById('bgMediaContainer');
+            const currentBlur = localStorage.getItem('jp_bg_blur') || '0';
+            if (isVideo) {
+                container.innerHTML = `<video src="${src}" autoplay loop muted playsinline style="filter: blur(${currentBlur}px);"></video>`;
+            } else {
+                container.innerHTML = `<img src="${src}" alt="Background" style="filter: blur(${currentBlur}px);" />`;
+            }
+        }
+
+        function updateBlur(val) {
+            document.getElementById('blurValText').innerText = val + 'px';
+            localStorage.setItem('jp_bg_blur', val);
+            const media = document.querySelector('#bgMediaContainer img, #bgMediaContainer video');
+            if (media) media.style.filter = `blur(${val}px)`;
+        }
+
+        function updateOverlayOpacity(val) {
+            document.getElementById('overlayValText').innerText = Math.round(val * 100) + '%';
+            document.getElementById('bgOverlay').style.opacity = val;
+            localStorage.setItem('jp_bg_overlay', val);
+        }
+
+        function resetBackground() {
+            // Reset ke preview.gif
+            document.getElementById('bgMediaContainer').innerHTML = `<img src="preview.gif" alt="Background Preview" style="filter: blur(0px);" />`;
+            localStorage.removeItem('jp_bg_data');
+            localStorage.removeItem('jp_bg_is_video');
+            localStorage.removeItem('jp_bg_blur');
+            localStorage.removeItem('jp_bg_overlay');
+            updateBlur(0);
+            updateOverlayOpacity(0.6);
+            closeSettingsModal();
+        }
+
+        // --- 9. Load Saved Settings ---
+        window.addEventListener('DOMContentLoaded', () => {
+            const savedNotes = localStorage.getItem('jp_quick_notes');
+            if (savedNotes !== null) document.getElementById('quickNotesInput').value = savedNotes;
+
+            // Load background: jika ada di localStorage, pakai itu. Jika tidak, preview.gif (sudah default di HTML).
+            const bgData = localStorage.getItem('jp_bg_data');
+            const isVideo = localStorage.getItem('jp_bg_is_video') === 'true';
+            if (bgData) {
+                applyBgMedia(bgData, isVideo);
+            }
+
+            const savedBlur = localStorage.getItem('jp_bg_blur');
+            if (savedBlur !== null) {
+                document.getElementById('blurSlider').value = savedBlur;
+                updateBlur(savedBlur);
+            }
+
+            const savedOverlay = localStorage.getItem('jp_bg_overlay');
+            if (savedOverlay !== null) {
+                document.getElementById('overlaySlider').value = savedOverlay;
+                updateOverlayOpacity(savedOverlay);
+            }
+        });
+    </script>
+</body>
+</html>

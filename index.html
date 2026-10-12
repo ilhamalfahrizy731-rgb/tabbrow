@@ -705,7 +705,7 @@
             document.getElementById('quoteText').innerText = `"${q.text}" — ${q.author}`;
         }
 
-        // --- 8. Background Settings (preview.gif default) ---
+        // --- 8. Background Settings (background1.mp4 default) ---
         function openSettingsModal() { document.getElementById('settingsModal').classList.remove('hidden'); }
         function closeSettingsModal() { document.getElementById('settingsModal').classList.add('hidden'); }
 
@@ -757,8 +757,8 @@
         }
 
         function resetBackground() {
-            // Reset ke preview.gif
-            document.getElementById('bgMediaContainer').innerHTML = `<img src="preview.gif" alt="Background Preview" style="filter: blur(0px);" />`;
+            // Reset ke background1.mp4
+            document.getElementById('bgMediaContainer').innerHTML = `<img src="background1.mp4" alt="Background Preview" style="filter: blur(0px);" />`;
             localStorage.removeItem('jp_bg_data');
             localStorage.removeItem('jp_bg_is_video');
             localStorage.removeItem('jp_bg_blur');
@@ -773,7 +773,7 @@
             const savedNotes = localStorage.getItem('jp_quick_notes');
             if (savedNotes !== null) document.getElementById('quickNotesInput').value = savedNotes;
 
-            // Load background: jika ada di localStorage, pakai itu. Jika tidak, preview.gif (sudah default di HTML).
+            // Load background: jika ada di localStorage, pakai itu. Jika tidak, background1.mp4 (sudah default di HTML).
             const bgData = localStorage.getItem('jp_bg_data');
             const isVideo = localStorage.getItem('jp_bg_is_video') === 'true';
             if (bgData) {

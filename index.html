@@ -758,7 +758,7 @@
 
         function resetBackground() {
             // Reset ke bnw.mp4
-            document.getElementById('bgMediaContainer').innerHTML = `<img src="bnw.mp4" alt="Background Preview" style="filter: blur(0px);" />`;
+            document.getElementById('bgMediaContainer').innerHTML = `<video src="bnw.mp4" alt="Background Preview" style="filter: blur(0px);" />`;
             localStorage.removeItem('jp_bg_data');
             localStorage.removeItem('jp_bg_is_video');
             localStorage.removeItem('jp_bg_blur');

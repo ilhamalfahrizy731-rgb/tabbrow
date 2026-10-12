@@ -1028,14 +1028,6 @@
             const q = quotes[Math.floor(Math.random() * quotes.length)];
             document.getElementById('quoteText').innerText = `"${q.text}" — ${q.author}`;
         }
-
-<<<<<<< HEAD
-        // --- 8. Background Settings (background1.mp4 default) ---
-=======
-        // ============================================================
-        // 8. Background Settings
-        // ============================================================
->>>>>>> d350113 (memek)
         function openSettingsModal() { document.getElementById('settingsModal').classList.remove('hidden'); }
         function closeSettingsModal() { document.getElementById('settingsModal').classList.add('hidden'); }
 
@@ -1128,13 +1120,8 @@
         // 9. Load Saved Settings
         // ============================================================
         window.addEventListener('DOMContentLoaded', () => {
-<<<<<<< HEAD
             const savedNotes = localStorage.getItem('jp_quick_notes');
             if (savedNotes !== null) document.getElementById('quickNotesInput').value = savedNotes;
-
-            // Load background: jika ada di localStorage, pakai itu. Jika tidak, background1.mp4 (sudah default di HTML).
-=======
->>>>>>> d350113 (memek)
             const bgData = localStorage.getItem('jp_bg_data');
             const isVideo = localStorage.getItem('jp_bg_is_video') === 'true';
             if (bgData) applyBgMedia(bgData, isVideo);

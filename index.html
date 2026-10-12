@@ -4,13 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Tab Baru - Japanese Dark Aesthetic</title>
-    <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Noto+Serif+JP:wght@400;600;700;900&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <!-- Lucide Icons -->
     <script src="https://unpkg.com/lucide@latest"></script>
 
     <script>
@@ -69,6 +66,36 @@
             box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.6), inset 0 1px 0 rgba(212, 175, 55, 0.2);
         }
 
+        .search-form {
+            background: rgba(11, 16, 18, 0.6);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.25s ease;
+        }
+        .search-form:focus-within {
+            border-color: rgba(212, 175, 55, 0.6);
+            box-shadow: 0 0 20px rgba(212, 175, 55, 0.15);
+        }
+        .search-form input {
+            background: transparent;
+            border: none;
+            color: #ffffff;
+        }
+        .search-form input:focus {
+            outline: none;
+            box-shadow: none;
+        }
+        .search-form.shake {
+            animation: shake 0.4s cubic-bezier(.36,.07,.19,.97) both;
+            border-color: rgba(200, 75, 49, 0.7) !important;
+            box-shadow: 0 0 25px rgba(200, 75, 49, 0.3) !important;
+        }
+        @keyframes shake {
+            10%, 90% { transform: translateX(-2px); }
+            20%, 80% { transform: translateX(4px); }
+            30%, 50%, 70% { transform: translateX(-6px); }
+            40%, 60% { transform: translateX(6px); }
+        }
+
         .dynamic-island {
             background: rgba(11, 16, 18, 0.85);
             backdrop-filter: blur(20px);
@@ -100,19 +127,6 @@
             pointer-events: none;
         }
 
-        .jp-input {
-            background: rgba(11, 16, 18, 0.6);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            color: #ffffff;
-            transition: all 0.25s ease;
-        }
-
-        .jp-input:focus {
-            border-color: rgba(212, 175, 55, 0.6);
-            box-shadow: 0 0 15px rgba(212, 175, 55, 0.15);
-            outline: none;
-        }
-
         .jp-btn {
             transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
         }
@@ -125,44 +139,30 @@
             transform: translateY(1px);
         }
 
-        ::-webkit-scrollbar {
-            width: 6px;
-        }
-        ::-webkit-scrollbar-track {
-            background: #0e1416;
-        }
-        ::-webkit-scrollbar-thumb {
-            background: #2b4c52;
-            border-radius: 3px;
-        }
-        ::-webkit-scrollbar-thumb:hover {
-            background: #d4af37;
-        }
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: #0e1416; }
+        ::-webkit-scrollbar-thumb { background: #2b4c52; border-radius: 3px; }
+        ::-webkit-scrollbar-thumb:hover { background: #d4af37; }
 
         #bgMediaContainer {
             position: fixed;
-            top: 0;
-            left: 0;
-            width: 100vw;
-            height: 100vh;
+            top: 0; left: 0;
+            width: 100vw; height: 100vh;
             z-index: 0;
             pointer-events: none;
             overflow: hidden;
         }
 
         #bgMediaContainer img, #bgMediaContainer video {
-            width: 100%;
-            height: 100%;
+            width: 100%; height: 100%;
             object-fit: cover;
             transition: filter 0.3s ease;
         }
 
         #bgOverlay {
             position: fixed;
-            top: 0;
-            left: 0;
-            width: 100vw;
-            height: 100vh;
+            top: 0; left: 0;
+            width: 100vw; height: 100vh;
             z-index: 1;
             pointer-events: none;
             background-color: #080d0e;
@@ -182,23 +182,159 @@
             height: 1.25rem;
             stroke-width: 2;
         }
+
+        /* === CUSTOM TOAST NOTIFICATION === */
+        #toastContainer {
+            position: fixed;
+            top: 1rem;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 200;
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+            pointer-events: none;
+            width: calc(100% - 2rem);
+            max-width: 420px;
+        }
+
+        .toast {
+            pointer-events: auto;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.85rem 1rem;
+            background: rgba(11, 16, 18, 0.92);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 16px;
+            box-shadow: 0 15px 35px -10px rgba(0, 0, 0, 0.7), 0 0 0 1px rgba(255, 255, 255, 0.05);
+            color: #e5eceb;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.75rem;
+            letter-spacing: 0.02em;
+            transform: translateY(-120%);
+            opacity: 0;
+            transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.3s ease;
+        }
+
+        .toast.show {
+            transform: translateY(0);
+            opacity: 1;
+        }
+
+        .toast.hide {
+            transform: translateY(-120%);
+            opacity: 0;
+        }
+
+        .toast-icon-wrap {
+            width: 32px;
+            height: 32px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .toast-warning .toast-icon-wrap {
+            background: rgba(200, 75, 49, 0.15);
+            border: 1px solid rgba(200, 75, 49, 0.4);
+            color: #c84b31;
+        }
+        .toast-warning {
+            border-color: rgba(200, 75, 49, 0.35);
+        }
+
+        .toast-success .toast-icon-wrap {
+            background: rgba(212, 175, 55, 0.15);
+            border: 1px solid rgba(212, 175, 55, 0.4);
+            color: #d4af37;
+        }
+        .toast-success {
+            border-color: rgba(212, 175, 55, 0.35);
+        }
+
+        .toast-info .toast-icon-wrap {
+            background: rgba(43, 76, 82, 0.4);
+            border: 1px solid rgba(43, 76, 82, 0.6);
+            color: #d4af37;
+        }
+
+        .toast-content {
+            flex-grow: 1;
+            min-width: 0;
+        }
+
+        .toast-title {
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            font-size: 0.7rem;
+            margin-bottom: 2px;
+        }
+
+        .toast-warning .toast-title { color: #e07a63; }
+        .toast-success .toast-title { color: #d4af37; }
+        .toast-info .toast-title    { color: #d4af37; }
+
+        .toast-message {
+            color: #b8c4c2;
+            font-size: 0.72rem;
+            line-height: 1.35;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+        }
+
+        .toast-close {
+            flex-shrink: 0;
+            color: #6b7a78;
+            background: transparent;
+            border: none;
+            cursor: pointer;
+            padding: 4px;
+            border-radius: 8px;
+            transition: color 0.2s ease, background 0.2s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .toast-close:hover {
+            color: #ffffff;
+            background: rgba(255, 255, 255, 0.06);
+        }
+
+        .toast-progress {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            height: 2px;
+            background: #d4af37;
+            border-radius: 0 0 16px 16px;
+            transition: width linear;
+        }
+        .toast-warning .toast-progress { background: #c84b31; }
+
+        .toast { position: relative; overflow: hidden; }
     </style>
 </head>
 <body class="min-h-screen flex flex-col justify-between p-4 sm:p-6 md:p-8 relative selection:bg-jpGold selection:text-black">
 
-    <!-- Background Preview GIF -->
     <div id="bgMediaContainer">
         <video src="background1.mp4" autoplay loop muted playsinline style="filter: blur(0px);"></video>
     </div>
     <div id="bgOverlay"></div>
 
-    <!-- Japanese Aesthetic Decorative Kanji Watermark -->
     <div class="fixed right-6 top-12 z-0 opacity-10 text-jpGold text-6xl md:text-8xl kanji-vertical font-black hidden lg:block">
         静寂と調和
     </div>
     <div class="fixed left-6 bottom-12 z-0 opacity-10 text-jpGold text-6xl md:text-8xl kanji-vertical font-black hidden lg:block">
         日常の美学
     </div>
+
+    <!-- Toast Container -->
+    <div id="toastContainer"></div>
 
     <!-- Dynamic Island Music Player -->
     <div class="fixed top-4 left-1/2 -translate-x-1/2 z-50 flex justify-center">
@@ -260,7 +396,6 @@
                 </div>
             </div>
 
-            <!-- HTML5 Audio Element (Menggunakan file lokal lelah.mp3) -->
             <audio id="lofiAudio" preload="auto">
                 <source src="lelah.mp3" type="audio/mpeg">
             </audio>
@@ -295,9 +430,8 @@
             </div>
         </header>
 
-        <main class="w-full my-auto py-2 grid grid-cols-1 lg:grid-cols-12 gap-8">
-            
-            <div class="lg:col-span-8 flex flex-col items-center justify-center space-y-8">
+        <main class="w-full flex-1 flex items-center justify-center py-2">
+            <div class="w-full max-w-3xl flex flex-col items-center justify-center space-y-8">
                 
                 <div class="text-center w-full space-y-3">
                     <div class="inline-block px-4 py-2">
@@ -314,49 +448,50 @@
                     </div>
                 </div>
 
-                <div class="w-full max-w-2xl">
-                    <form id="searchForm" action="https://www.google.com/search" method="GET" class="flex flex-col sm:flex-row gap-2 relative">
-                        <div class="relative flex-grow flex items-center">
-                            <div class="absolute left-4 text-jpGold/70 pointer-events-none">
-                                <i id="searchIcon" data-lucide="search" class="w-5 h-5 stroke-[2]"></i>
-                            </div>
-                            <input type="text" id="searchInput" name="q" placeholder="Cari di web atau ketik URL..." autocomplete="off"
-                                class="w-full pl-12 pr-4 py-3.5 rounded-2xl jp-input text-sm sm:text-base font-sans placeholder-gray-500">
+                <!-- SEARCH FORM TERPADU -->
+                <div class="w-full max-w-2xl mx-auto">
+                    <form id="searchForm" action="https://www.google.com/search" method="GET" novalidate
+                          class="search-form flex items-center rounded-2xl overflow-visible relative">
+                        
+                        <div class="pl-4 pr-2 text-jpGold/70 pointer-events-none flex-shrink-0">
+                            <i id="searchIcon" data-lucide="search" class="w-5 h-5 stroke-[2]"></i>
                         </div>
 
-                        <div class="relative" id="customEngineDropdown">
-                            <button type="button" onclick="toggleEngineDropdown()" id="selectedEngineBtn" 
-                                class="w-full sm:w-auto px-5 py-3.5 bg-jpCard border border-jpBorder hover:border-jpGold/40 text-gray-200 font-medium text-xs sm:text-sm rounded-2xl jp-btn flex items-center justify-between gap-3 min-w-[140px]">
-                                <span class="flex items-center gap-2">
-                                    <i id="engineIcon" data-lucide="search" class="w-4 h-4 text-jpGold stroke-[2]"></i>
-                                    <span id="engineLabel" class="tracking-wider">GOOGLE</span>
-                                </span>
-                                <i data-lucide="chevron-down" class="w-4 h-4 text-gray-400 stroke-[2]"></i>
+                        <input type="text" id="searchInput" name="q" placeholder="Cari di web atau ketik URL..." autocomplete="off"
+                            class="flex-grow py-3.5 text-sm sm:text-base font-sans placeholder-gray-500 min-w-0 bg-transparent border-none outline-none text-white">
+
+                        <div class="relative flex-shrink-0 border-l border-white/10" id="customEngineDropdown">
+                            <button type="button" id="selectedEngineBtn" 
+                                class="h-full px-3 sm:px-4 py-3.5 text-gray-300 hover:text-jpGold font-medium text-xs sm:text-sm flex items-center gap-2 transition-colors cursor-pointer">
+                                <i id="engineIcon" data-lucide="search" class="w-4 h-4 text-jpGold stroke-[2]"></i>
+                                <span id="engineLabel" class="tracking-wider hidden sm:inline">GOOGLE</span>
+                                <i data-lucide="chevron-down" class="w-3.5 h-3.5 text-gray-500 stroke-[2]"></i>
                             </button>
 
-                            <div id="engineMenu" class="hidden absolute right-0 top-full mt-2 w-full sm:w-48 bg-jpBg/95 border border-jpBorder rounded-xl shadow-2xl z-50 overflow-hidden divide-y divide-jpBorder backdrop-blur-md">
-                                <button type="button" onclick="selectSearchEngine('google')" class="w-full px-4 py-3 text-xs text-left hover:bg-jpTeal/30 text-gray-200 hover:text-jpGold flex items-center gap-2.5 transition">
+                            <div id="engineMenu" class="hidden absolute right-0 top-full mt-2 w-48 bg-jpBg/95 border border-jpBorder rounded-xl shadow-2xl z-[100] overflow-hidden divide-y divide-jpBorder backdrop-blur-md">
+                                <button type="button" data-engine="google" class="engine-option w-full px-4 py-3 text-xs text-left hover:bg-jpTeal/30 text-gray-200 hover:text-jpGold flex items-center gap-2.5 transition">
                                     <i data-lucide="search" class="w-4 h-4 stroke-[2]"></i> GOOGLE
                                 </button>
-                                <button type="button" onclick="selectSearchEngine('duckduckgo')" class="w-full px-4 py-3 text-xs text-left hover:bg-jpTeal/30 text-gray-200 hover:text-jpGold flex items-center gap-2.5 transition">
+                                <button type="button" data-engine="duckduckgo" class="engine-option w-full px-4 py-3 text-xs text-left hover:bg-jpTeal/30 text-gray-200 hover:text-jpGold flex items-center gap-2.5 transition">
                                     <i data-lucide="shield" class="w-4 h-4 stroke-[2]"></i> DUCKDUCKGO
                                 </button>
-                                <button type="button" onclick="selectSearchEngine('github')" class="w-full px-4 py-3 text-xs text-left hover:bg-jpTeal/30 text-gray-200 hover:text-jpGold flex items-center gap-2.5 transition">
+                                <button type="button" data-engine="github" class="engine-option w-full px-4 py-3 text-xs text-left hover:bg-jpTeal/30 text-gray-200 hover:text-jpGold flex items-center gap-2.5 transition">
                                     <i data-lucide="github" class="w-4 h-4 stroke-[2]"></i> GITHUB
                                 </button>
-                                <button type="button" onclick="selectSearchEngine('youtube')" class="w-full px-4 py-3 text-xs text-left hover:bg-jpTeal/30 text-gray-200 hover:text-jpGold flex items-center gap-2.5 transition">
+                                <button type="button" data-engine="youtube" class="engine-option w-full px-4 py-3 text-xs text-left hover:bg-jpTeal/30 text-gray-200 hover:text-jpGold flex items-center gap-2.5 transition">
                                     <i data-lucide="youtube" class="w-4 h-4 stroke-[2]"></i> YOUTUBE
                                 </button>
                             </div>
                         </div>
 
-                        <button type="submit" class="bg-jpGold hover:bg-jpGoldMuted text-jpBg px-6 py-3.5 rounded-2xl jp-btn font-semibold flex items-center justify-center shadow-jp-gold">
+                        <button type="submit" class="bg-jpGold hover:bg-jpGoldMuted text-jpBg h-full px-5 sm:px-6 py-3.5 font-semibold flex items-center justify-center transition-colors flex-shrink-0 rounded-r-2xl">
                             <i data-lucide="arrow-right" class="w-5 h-5 stroke-[2.5]"></i>
                         </button>
                     </form>
                 </div>
 
-                <div class="w-full space-y-3">
+                <!-- Shortcuts -->
+                <div class="w-full max-w-2xl mx-auto space-y-3">
                     <div class="flex justify-between items-center px-1">
                         <span class="text-xs font-mono tracking-widest text-jpGold uppercase flex items-center gap-2">
                             <i data-lucide="bookmark" class="w-3.5 h-3.5 stroke-[2]"></i> PINTASAN // ショートカット
@@ -366,26 +501,11 @@
                         </button>
                     </div>
 
-                    <div id="shortcutsGrid" class="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-8 gap-3">
+                    <div id="shortcutsGrid" class="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-8 gap-3 justify-center">
                     </div>
                 </div>
 
             </div>
-
-            <div class="lg:col-span-4 flex flex-col space-y-6">
-                <div class="jp-panel p-5 rounded-2xl flex flex-col flex-grow">
-                    <div class="flex items-center justify-between mb-3">
-                        <div class="flex items-center space-x-2">
-                            <i data-lucide="file-text" class="w-4 h-4 text-jpGold stroke-[2]"></i>
-                            <h3 class="font-mono text-xs tracking-wider text-gray-300 uppercase">CATATAN // メモ</h3>
-                        </div>
-                        <span id="noteSaveStatus" class="font-mono text-[10px] text-jpTextMuted">SAVED</span>
-                    </div>
-                    <textarea id="quickNotesInput" oninput="saveNotes()" placeholder="Tulis rencana, tugas, atau ide kamu..."
-                        class="w-full h-36 bg-jpCharcoal/60 text-gray-200 p-3.5 rounded-xl border border-jpBorder text-xs font-mono resize-none outline-none leading-relaxed focus:border-jpGold/40 transition"></textarea>
-                </div>
-            </div>
-
         </main>
 
         <footer class="w-full max-w-4xl mx-auto text-center pb-2">
@@ -404,6 +524,7 @@
 
     </div>
 
+    <!-- Settings Modal -->
     <div id="settingsModal" class="fixed inset-0 bg-black/80 backdrop-blur-md z-50 flex items-center justify-center hidden p-4">
         <div class="jp-panel text-gray-200 w-full max-w-md p-6 rounded-3xl space-y-5 border border-jpGold/30">
             <div class="flex justify-between items-center border-b border-jpBorder pb-3">
@@ -457,6 +578,7 @@
         </div>
     </div>
 
+    <!-- Add Shortcut Modal -->
     <div id="addModal" class="fixed inset-0 bg-black/80 backdrop-blur-md z-50 flex items-center justify-center hidden p-4">
         <div class="jp-panel text-gray-200 w-full max-w-md p-6 rounded-3xl space-y-4 border border-jpGold/30">
             <div class="flex justify-between items-center border-b border-jpBorder pb-2">
@@ -466,18 +588,18 @@
                 </button>
             </div>
             
-            <form id="addShortcutForm" onsubmit="handleAddNewShortcut(event)" class="space-y-3 font-mono text-xs">
+            <form id="addShortcutForm" onsubmit="handleAddNewShortcut(event)" class="space-y-3 font-mono text-xs" novalidate>
                 <div>
                     <label class="block mb-1 text-gray-400">NAMA SITUS</label>
-                    <input type="text" id="shortcutName" required placeholder="Contoh: ChatGPT" class="w-full p-2.5 bg-jpCharcoal text-gray-200 border border-jpBorder rounded-xl outline-none focus:border-jpGold">
+                    <input type="text" id="shortcutName" placeholder="Contoh: ChatGPT" class="w-full p-2.5 bg-jpCharcoal text-gray-200 border border-jpBorder rounded-xl outline-none focus:border-jpGold">
                 </div>
                 <div>
                     <label class="block mb-1 text-gray-400">URL SITUS (https://...)</label>
-                    <input type="url" id="shortcutUrl" required placeholder="https://chatgpt.com" class="w-full p-2.5 bg-jpCharcoal text-gray-200 border border-jpBorder rounded-xl outline-none focus:border-jpGold">
+                    <input type="text" id="shortcutUrl" placeholder="https://chatgpt.com" class="w-full p-2.5 bg-jpCharcoal text-gray-200 border border-jpBorder rounded-xl outline-none focus:border-jpGold">
                 </div>
                 <div>
                     <label class="block mb-1 text-gray-400">NAMA IKON (globe, bot, youtube, github, twitter, tv, dll)</label>
-                    <input type="text" id="shortcutIcon" required placeholder="globe" value="globe" class="w-full p-2.5 bg-jpCharcoal text-gray-200 border border-jpBorder rounded-xl outline-none focus:border-jpGold">
+                    <input type="text" id="shortcutIcon" placeholder="globe" value="globe" class="w-full p-2.5 bg-jpCharcoal text-gray-200 border border-jpBorder rounded-xl outline-none focus:border-jpGold">
                 </div>
                 
                 <div class="flex justify-end space-x-2 pt-2">
@@ -491,7 +613,94 @@
     <script>
         lucide.createIcons();
 
-        // --- 1. Clock & Date ---
+        // ============================================================
+        // TOAST NOTIFICATION SYSTEM (custom, non-blocking)
+        // ============================================================
+        const toastContainer = document.getElementById('toastContainer');
+
+        const toastIcons = {
+            warning: 'alert-triangle',
+            success: 'check-circle-2',
+            info: 'info'
+        };
+
+        function showToast({ type = 'info', title = 'NOTIFIKASI', message = '', duration = 3200 } = {}) {
+            const toast = document.createElement('div');
+            toast.className = `toast toast-${type}`;
+            const iconName = toastIcons[type] || 'info';
+
+            toast.innerHTML = `
+                <div class="toast-icon-wrap">
+                    <i data-lucide="${iconName}" class="w-4 h-4 stroke-[2.5]"></i>
+                </div>
+                <div class="toast-content">
+                    <div class="toast-title">${title}</div>
+                    <div class="toast-message">${message}</div>
+                </div>
+                <button class="toast-close" aria-label="Tutup">
+                    <i data-lucide="x" class="w-3.5 h-3.5 stroke-[2.5]"></i>
+                </button>
+                <div class="toast-progress" style="width:100%;"></div>
+            `;
+
+            toastContainer.appendChild(toast);
+            lucide.createIcons();
+
+            // Trigger animasi masuk
+            requestAnimationFrame(() => {
+                requestAnimationFrame(() => toast.classList.add('show'));
+            });
+
+            const progressBar = toast.querySelector('.toast-progress');
+            let startTime = Date.now();
+            let remaining = duration;
+            let timerId = null;
+            let paused = false;
+
+            const tick = () => {
+                if (paused) return;
+                const elapsed = Date.now() - startTime;
+                const pct = Math.max(0, 100 - (elapsed / duration) * 100);
+                progressBar.style.width = pct + '%';
+                if (elapsed >= duration) {
+                    dismissToast(toast);
+                } else {
+                    timerId = requestAnimationFrame(tick);
+                }
+            };
+            timerId = requestAnimationFrame(tick);
+
+            // Pause saat hover
+            toast.addEventListener('mouseenter', () => {
+                paused = true;
+                remaining = duration - (Date.now() - startTime);
+                if (timerId) cancelAnimationFrame(timerId);
+            });
+            toast.addEventListener('mouseleave', () => {
+                if (paused) {
+                    paused = false;
+                    duration = remaining;
+                    startTime = Date.now();
+                    timerId = requestAnimationFrame(tick);
+                }
+            });
+
+            toast.querySelector('.toast-close').addEventListener('click', () => dismissToast(toast));
+
+            return toast;
+        }
+
+        function dismissToast(toast) {
+            if (!toast || toast.dataset.dismissed === 'true') return;
+            toast.dataset.dismissed = 'true';
+            toast.classList.remove('show');
+            toast.classList.add('hide');
+            setTimeout(() => toast.remove(), 400);
+        }
+
+        // ============================================================
+        // 1. Clock & Date
+        // ============================================================
         function updateClockAndGreeting() {
             const now = new Date();
             const hours = String(now.getHours()).padStart(2, '0');
@@ -520,7 +729,9 @@
         setInterval(updateClockAndGreeting, 1000);
         updateClockAndGreeting();
 
-        // --- 2. Dynamic Island ---
+        // ============================================================
+        // 2. Dynamic Island
+        // ============================================================
         let isIslandExpanded = false;
         const island = document.getElementById('dynamicIsland');
         const islandCollapsed = document.getElementById('islandCollapsed');
@@ -543,7 +754,9 @@
             }
         }
 
-        // --- 3. Search Engine ---
+        // ============================================================
+        // 3. Search Engine Dropdown
+        // ============================================================
         const searchEngines = {
             google: { name: 'GOOGLE', url: 'https://www.google.com/search?q=', icon: 'search' },
             duckduckgo: { name: 'DUCKDUCKGO', url: 'https://duckduckgo.com/?q=', icon: 'shield' },
@@ -551,30 +764,113 @@
             youtube: { name: 'YOUTUBE', url: 'https://www.youtube.com/results?search_query=', icon: 'youtube' }
         };
 
-        function toggleEngineDropdown() {
-            document.getElementById('engineMenu').classList.toggle('hidden');
+        const engineBtn = document.getElementById('selectedEngineBtn');
+        const engineMenu = document.getElementById('engineMenu');
+
+        function openEngineMenu() { engineMenu.classList.remove('hidden'); }
+        function closeEngineMenu() { engineMenu.classList.add('hidden'); }
+
+        function toggleEngineMenu(e) {
+            if (e) { e.preventDefault(); e.stopPropagation(); }
+            if (engineMenu.classList.contains('hidden')) openEngineMenu();
+            else closeEngineMenu();
         }
+
+        engineBtn.addEventListener('click', toggleEngineMenu);
+
+        document.querySelectorAll('.engine-option').forEach((btn) => {
+            btn.addEventListener('click', (e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                selectSearchEngine(btn.getAttribute('data-engine'));
+            });
+        });
 
         function selectSearchEngine(key) {
             if (!searchEngines[key]) return;
             const engine = searchEngines[key];
             document.getElementById('searchForm').action = engine.url.split('?')[0];
             document.getElementById('engineLabel').innerText = engine.name;
-            
             document.getElementById('engineIcon').setAttribute('data-lucide', engine.icon);
             document.getElementById('searchIcon').setAttribute('data-lucide', engine.icon);
             lucide.createIcons();
-            toggleEngineDropdown();
+            closeEngineMenu();
         }
 
-        window.addEventListener('click', (e) => {
+        document.addEventListener('click', (e) => {
             const dropdown = document.getElementById('customEngineDropdown');
-            if (!dropdown.contains(e.target)) {
-                document.getElementById('engineMenu').classList.add('hidden');
+            if (dropdown && !dropdown.contains(e.target)) closeEngineMenu();
+        });
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') closeEngineMenu();
+        });
+
+        // ============================================================
+        // 4. SEARCH FORM VALIDATION (custom, no browser alert)
+        // ============================================================
+        const searchForm = document.getElementById('searchForm');
+        const searchInput = document.getElementById('searchInput');
+
+        searchForm.addEventListener('submit', (e) => {
+            const value = searchInput.value.trim();
+
+            if (!value) {
+                e.preventDefault();
+                e.stopPropagation();
+
+                // Shake animation
+                searchForm.classList.add('shake');
+                setTimeout(() => searchForm.classList.remove('shake'), 500);
+
+                // Toast custom
+                showToast({
+                    type: 'warning',
+                    title: 'KATA KUNCI KOSONG',
+                    message: 'Silakan isi kolom pencarian terlebih dahulu sebelum mencari.',
+                    duration: 3200
+                });
+
+                // Fokus kembali ke input
+                searchInput.focus();
+                return false;
+            }
+
+            // Kalau user mengetik URL langsung (mis. google.com), redirect ke URL tersebut
+            const urlPattern = /^(https?:\/\/)?([\w-]+\.)+[\w-]+(\/[\w\-./?%&=]*)?$/i;
+            if (urlPattern.test(value) && !value.includes(' ')) {
+                e.preventDefault();
+                let url = value;
+                if (!/^https?:\/\//i.test(url)) url = 'https://' + url;
+                showToast({
+                    type: 'success',
+                    title: 'MEMBUKA URL',
+                    message: `Mengarahkan ke ${url}`,
+                    duration: 2000
+                });
+                setTimeout(() => { window.location.href = url; }, 300);
+                return false;
+            }
+
+            // Lolos validasi → tampilkan toast sukses, lalu biarkan form submit
+            showToast({
+                type: 'success',
+                title: 'MENCARI...',
+                message: `Mencari "${value}" di ${document.getElementById('engineLabel').innerText}.`,
+                duration: 2000
+            });
+        });
+
+        // Hapus efek shake saat user mulai mengetik
+        searchInput.addEventListener('input', () => {
+            if (searchForm.classList.contains('shake')) {
+                searchForm.classList.remove('shake');
             }
         });
 
-        // --- 4. Shortcuts ---
+        // ============================================================
+        // 5. Shortcuts
+        // ============================================================
         const defaultShortcuts = [
             { name: 'YouTube', url: 'https://www.youtube.com', icon: 'youtube' },
             { name: 'GitHub', url: 'https://github.com', icon: 'github' },
@@ -624,18 +920,48 @@
         
         function handleAddNewShortcut(e) {
             e.preventDefault();
-            const name = document.getElementById('shortcutName').value;
-            const url = document.getElementById('shortcutUrl').value;
-            const icon = document.getElementById('shortcutIcon').value;
+            const name = document.getElementById('shortcutName').value.trim();
+            const url = document.getElementById('shortcutUrl').value.trim();
+            const icon = document.getElementById('shortcutIcon').value.trim() || 'globe';
+
+            // Validasi custom
+            if (!name || !url) {
+                showToast({
+                    type: 'warning',
+                    title: 'DATA BELUM LENGKAP',
+                    message: 'Nama dan URL pintasan wajib diisi.',
+                    duration: 3000
+                });
+                return;
+            }
+            if (!/^https?:\/\/.+/i.test(url)) {
+                showToast({
+                    type: 'warning',
+                    title: 'URL TIDAK VALID',
+                    message: 'URL harus dimulai dengan http:// atau https://',
+                    duration: 3000
+                });
+                return;
+            }
+
             const shortcuts = getShortcuts();
             shortcuts.push({ name, url, icon });
             localStorage.setItem('jp_shortcuts', JSON.stringify(shortcuts));
             renderShortcuts();
             closeAddShortcutModal();
+
+            showToast({
+                type: 'success',
+                title: 'PINTASAN DITAMBAHKAN',
+                message: `"${name}" berhasil disimpan.`,
+                duration: 2500
+            });
         }
         renderShortcuts();
 
-        // --- 5. Audio Player (lelah.mp3) ---
+        // ============================================================
+        // 6. Audio Player
+        // ============================================================
         const audio = document.getElementById('lofiAudio');
         let isPlaying = false;
 
@@ -659,7 +985,12 @@
                         isPlaying = true;
                     }).catch(error => {
                         console.error("Audio play failed:", error);
-                        alert('Gagal memutar audio. Pastikan file lelah.mp3 ada di folder yang sama dan Anda menjalankan melalui Local Server (bukan file:///).');
+                        showToast({
+                            type: 'warning',
+                            title: 'GAGAL MEMUTAR AUDIO',
+                            message: 'Pastikan file lelah.mp3 ada & dijalankan via Local Server (bukan file:///).',
+                            duration: 4500
+                        });
                     });
                 }
             }
@@ -683,16 +1014,9 @@
 
         function setVolume(val) { audio.volume = val; }
 
-        // --- 6. Notes ---
-        function saveNotes() {
-            const val = document.getElementById('quickNotesInput').value;
-            localStorage.setItem('jp_quick_notes', val);
-            const status = document.getElementById('noteSaveStatus');
-            status.innerText = 'SAVING...';
-            setTimeout(() => { status.innerText = 'SAVED'; }, 400);
-        }
-
-        // --- 7. Quotes ---
+        // ============================================================
+        // 7. Quotes
+        // ============================================================
         const quotes = [
             { text: "Kesederhanaan adalah bentuk kecerdasan tertinggi.", author: "Pepatah Jepang" },
             { text: "Jatuh tujuh kali, bangkit delapan kali (七転び八起き).", author: "Prinsip Daruma" },
@@ -705,7 +1029,13 @@
             document.getElementById('quoteText').innerText = `"${q.text}" — ${q.author}`;
         }
 
+<<<<<<< HEAD
         // --- 8. Background Settings (background1.mp4 default) ---
+=======
+        // ============================================================
+        // 8. Background Settings
+        // ============================================================
+>>>>>>> d350113 (memek)
         function openSettingsModal() { document.getElementById('settingsModal').classList.remove('hidden'); }
         function closeSettingsModal() { document.getElementById('settingsModal').classList.add('hidden'); }
 
@@ -719,18 +1049,38 @@
                 applyBgMedia(dataUrl, isVideo);
                 localStorage.setItem('jp_bg_data', dataUrl);
                 localStorage.setItem('jp_bg_is_video', isVideo ? 'true' : 'false');
+                showToast({
+                    type: 'success',
+                    title: 'BACKGROUND DIPERBARUI',
+                    message: `File ${isVideo ? 'video' : 'gambar'} berhasil dimuat.`,
+                    duration: 2500
+                });
             };
             reader.readAsDataURL(file);
         }
 
         function applyBgUrl() {
             const url = document.getElementById('bgUrlInput').value.trim();
-            if (!url) return;
+            if (!url) {
+                showToast({
+                    type: 'warning',
+                    title: 'URL KOSONG',
+                    message: 'Masukkan URL gambar atau video terlebih dahulu.',
+                    duration: 3000
+                });
+                return;
+            }
             const isVideo = url.endsWith('.mp4') || url.endsWith('.webm');
             applyBgMedia(url, isVideo);
             localStorage.setItem('jp_bg_data', url);
             localStorage.setItem('jp_bg_is_video', isVideo ? 'true' : 'false');
             closeSettingsModal();
+            showToast({
+                type: 'success',
+                title: 'BACKGROUND DIPERBARUI',
+                message: 'URL berhasil diterapkan.',
+                duration: 2500
+            });
         }
 
         function applyBgMedia(src, isVideo) {
@@ -766,19 +1116,28 @@
             updateBlur(0);
             updateOverlayOpacity(0.6);
             closeSettingsModal();
+            showToast({
+                type: 'info',
+                title: 'BACKGROUND DIRESET',
+                message: 'Latar belakang dikembalikan ke default.',
+                duration: 2500
+            });
         }
 
-        // --- 9. Load Saved Settings ---
+        // ============================================================
+        // 9. Load Saved Settings
+        // ============================================================
         window.addEventListener('DOMContentLoaded', () => {
+<<<<<<< HEAD
             const savedNotes = localStorage.getItem('jp_quick_notes');
             if (savedNotes !== null) document.getElementById('quickNotesInput').value = savedNotes;
 
             // Load background: jika ada di localStorage, pakai itu. Jika tidak, background1.mp4 (sudah default di HTML).
+=======
+>>>>>>> d350113 (memek)
             const bgData = localStorage.getItem('jp_bg_data');
             const isVideo = localStorage.getItem('jp_bg_is_video') === 'true';
-            if (bgData) {
-                applyBgMedia(bgData, isVideo);
-            }
+            if (bgData) applyBgMedia(bgData, isVideo);
 
             const savedBlur = localStorage.getItem('jp_bg_blur');
             if (savedBlur !== null) {
